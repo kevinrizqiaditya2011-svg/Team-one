@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper-50 antialiased;
+    /* Warna foreground Isolasi dihitung dari token ink — ditulis eksplisit agar
+       tidak bergantung pada @apply warna kustom (lebih tahan restart HMR). */
+    color: #0d1b33;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  /* Cegah halaman bisa digeser ke kiri/kanan (horizontal scroll) di semua halaman.
+     overflow-x: clip dipilih karena tidak membuat kontainer scroll sehingga
+     header sticky & animasi tetap berfungsi normal. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+  .dark body {
+    @apply bg-isolasi-950;
+    color: #e2e8f0;
+  }
+  /* Input tanggal native: ikon kalender mengikuti tema (Chrome menggambar ikon
+     sesuai color-scheme — tanpa ini, ikon gelap tak terlihat di mode gelap). */
+  input[type='date'] {
+    color-scheme: light;
+  }
+  .dark input[type='date'] {
+    color-scheme: dark;
+  }
+  ::selection {
+    @apply bg-sirkuit-400/30;
+  }
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/60 bg-white/85 backdrop-blur-xl;
+  }
+  .dark .glass {
+    @apply border-white/10 bg-isolasi-900/70;
+  }
+  .card {
+    @apply rounded-[1.1rem] border border-paper-200 bg-white shadow-soft;
+  }
+  .dark .card {
+    @apply border border-white/10 bg-isolasi-800/50 shadow-none backdrop-blur-xl;
+  }
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-sirkuit-500 focus:ring-4 focus:ring-sirkuit-500/15;
+  }
+  .dark .input {
+    @apply border-white/15 bg-isolasi-900/70 text-slate-100 placeholder-slate-500;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-sirkuit-600 px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-sirkuit-700 hover:shadow-glow focus:outline-none focus:ring-4 focus:ring-sirkuit-500/30 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-sm focus:outline-none focus:ring-4 focus:ring-slate-400/20 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .dark .btn-secondary {
+    @apply border-white/15 bg-white/[0.06] text-slate-200 hover:bg-white/10;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.18em] text-sirkuit-600 dark:text-sirkuit-300;
+  }
+
+  /* ---- Landing page (panel listrik) ---- */
+  .eco-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sirkuit-600 to-neon-600 px-6 py-3 text-sm font-bold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow focus:outline-none focus:ring-4 focus:ring-sirkuit-400/30 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .eco-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-sirkuit-300/40 bg-white/60 px-6 py-3 text-sm font-semibold text-sirkuit-700 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-sirkuit-400 hover:bg-white focus:outline-none focus:ring-4 focus:ring-sirkuit-400/20 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .dark .eco-btn-ghost {
+    @apply border-white/15 bg-white/5 text-slate-100 hover:bg-white/10;
+  }
+  .eco-glass {
+    @apply border border-paper-200/80 bg-white/70 backdrop-blur-xl;
+  }
+  .dark .eco-glass {
+    @apply border-white/10 bg-white/[0.04];
+  }
+  .eco-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-sirkuit-300/40 bg-sirkuit-500/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-sirkuit-700 dark:border-sirkuit-300/25 dark:bg-sirkuit-400/10 dark:text-sirkuit-200;
+  }
+  .eco-eyebrow {
+    @apply text-[11px] font-bold uppercase tracking-[0.24em] text-sirkuit-600 dark:text-neon-300;
+  }
+
+  /* Gradient teks utama: Sirkuit → Neon → Voltase */
+  .text-gradient {
+    @apply bg-gradient-to-r from-sirkuit-600 via-neon-500 to-voltase-500 bg-clip-text text-transparent;
+  }
+  .dark .text-gradient {
+    @apply from-sirkuit-300 via-neon-300 to-voltase-400;
+  }
+
+  /* Pola circuit-grid: titik solder + jejak PCB halus */
+  .circuit-grid {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgb(36 86 230 / 0.12) 1px, transparent 0),
+      linear-gradient(rgb(36 86 230 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(36 86 230 / 0.035) 1px, transparent 1px);
+    background-size: 26px 26px, 26px 26px, 26px 26px;
+  }
+  .dark .circuit-grid {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgb(122 167 255 / 0.10) 1px, transparent 0),
+      linear-gradient(rgb(122 167 255 / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(122 167 255 / 0.03) 1px, transparent 1px);
+  }
+
+  /* Signature element: Energy Bar — arus listrik mengalir di atas
+     gradient Sirkuit → Neon → Voltase. Tanpa `value` = strip dekoratif
+     dengan cahaya putih berjalan; dengan `value` = progres statis. */
+  .energy-bar {
+    @apply relative overflow-hidden rounded-full;
+    background: linear-gradient(90deg, #2456e6, #22d3ee, #f5b50a);
+  }
+  .energy-bar::after {
+    content: '';
+    @apply absolute inset-y-0 left-0 w-1/3 rounded-full;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.85), transparent);
+    animation: energy-flow 2.2s linear infinite;
+  }
+  .energy-bar-fill {
+    @apply h-full rounded-full;
+    background: linear-gradient(90deg, #2456e6, #22d3ee, #f5b50a);
+    transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* Keyframes energy-flow ditulis eksplisit di sini — Tailwind hanya me-emit
+   keyframes yang direferensikan utility animate-*, sedangkan energy-bar
+   memakainya lewat CSS polos. Tanpa ini, cahaya berjalan tidak bergerak. */
+@keyframes energy-flow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-slate-300;
+}
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-slate-700;
+}
+html.landing-scroll::-webkit-scrollbar-thumb {
+  @apply bg-isolasi-600;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
